@@ -1,3 +1,7 @@
+2004-10-28  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: implement partial functionality of 'setfood' tool.
+
 2004-10-26  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: allow use of selectors with 'foreach' tool.

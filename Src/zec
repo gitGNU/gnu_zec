@@ -277,6 +277,65 @@ zec_tool_foreach()
 	rm ${tmpfilenam}
 }
 
+zec_tool_setfood()
+{
+	local tmpfilenam="${TMPDIR:-/tmp}/zecsetfood$$"
+	local optionstate=NONE
+	local -A gameoptions
+	integer etus=0
+	float babyeatrate=0.0 eatrate=0.0
+
+	zec_send "version >$tmpfilenam"
+	zec_parseresponse
+	for i in ${(f)"$(<$tmpfilenam)"}
+	do
+		case "$i" in
+			(An update consists of (#b)([[:digit:]]##) empire time units.)
+			etus="$match[1]"
+			;;
+			((#b)([[:digit:]]##) babies eat ([[:digit:].]##) units of food becoming adults.)
+			babyeatrate=$(( match[2] / match[1] ))
+			;;
+			(In one time unit, (#b)([[:digit:]]##) people eat ([[:digit:].]##) units of food.)
+			eatrate=$(( match[2] / match[1] ))
+			;;
+			((#b)([[:digit:]]##) civilians will give birth to ([[:digit:].]##) babies per etu.)
+			civbirthrate=$(( match[2] / match[1] ))
+			;;
+			((#b)([[:digit:]]##) uncompensated workers will give birth to ([[:digit:].]##) babies.)
+			uwbirthrate=$(( match[2] / match[1] ))
+			;;
+			(Options enabled in this game:)
+			optionstate=enabled
+			;;
+			(Options disabled in this game:)
+			optionstate=disabled
+			;;
+			(*BIG_CITY*)
+			[[ optionstate == "enabled" ]] && gameoptions[BIG_CITY]=enabled
+			;;
+			(*NOFOOD*)
+			[[ optionstate == "enabled" ]] && gameoptions[NOFOOD]=enabled
+			;;
+		esac
+	done
+
+	rm ${tmpfilenam}
+	zec_send "dump * >$tmpfilenam"
+	zec_parseresponse
+	# We should really parse the column headers here.
+	for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:digit:]-]## [[:digit:]-]## *}
+	do
+	z=(${(z)i})
+	num=1
+	civ=$z[17]
+	mil=$z[18]
+	uw=$z[19]
+	thresh=$(( num * etus * eatrate * (civ + uw + mil ) + 2 * babyeatrate * (civ * civbirthrate + uw * uwbirthrate) ))
+	print -- "$z[1],$z[2] has $civ civ, $mil mil, $uw uw, not setting threshold to $thresh"
+	done
+}
+
 twitter() {
 	local g
 
@@ -319,7 +378,7 @@ twitter() {
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools
-zec_tools=(history jack alias foreach)
+zec_tools=(history jack alias foreach setfood)
 
 SCRIPTNAME="$0"
 
