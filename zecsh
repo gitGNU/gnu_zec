@@ -1,0 +1,216 @@
+# zecsh: Z-Shell Empire Client (shell mode)
+# Copyright (C) 2001-2002  Clint Adams
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+ZEC_VERSION="0.0.0.0.0"
+
+cat <<EOF;
+  zecsh version ${ZEC_VERSION}, Copyright (C) 2001-2002  Clint Adams
+  zecsh comes with ABSOLUTELY NO WARRANTY.
+  This is free software, and you are welcome to redistribute it
+  under certain conditions.
+
+EOF
+
+if [[ "$ZSH_VERSION" == 4.1.* ]];
+then
+
+zmodload -i zsh/parameter || exit 244
+zmodload -i zsh/net/tcp || exit 245
+
+# connect to empire server
+# usage: zelogin hostname_or_ip tcpportnum country password
+
+zelogin() {
+local greeting answer
+
+ztcp -d 9 $1 $2
+builtin read "$readopts" greeting
+[[ "$greeting" == "2 Empire server ready" ]] || return 1
+print -u9 "user $LOGNAME"
+builtin read "$readopts" answer
+[[ "$answer" == "0 hello $LOGNAME" ]] || return 2
+print -u9 "client zec $ZEC_VERSION"
+builtin read "$readopts" answer
+[[ "$answer" == "0 talking to zec $ZEC_VERSION" ]] || return 3
+print -u9 "country $3"
+builtin read "$readopts" answer
+[[ "$answer" == "0 country name $3" ]] || return 4
+print -u9 "pass $4"
+builtin read "$readopts" answer
+[[ "$answer" == "0 password ok" ]] || return 5
+print -u9 "play"
+builtin read "$readopts" answer
+[[ "$answer" == "2 2" ]] || return 6
+}
+
+zelogout() {
+local answer
+
+print -u9 "quit"
+builtin read "$readopts" answer
+[[ "$answer" == "3 so long" ]] || return 8
+}
+
+zec_alias_parse() {
+local cmd="$1"
+
+[[ -n "${zec_aliases[$cmd]}" ]] || return 9
+
+cookedline="${line/$cmd/$zec_aliases[$cmd]}"
+}
+
+zec_tool_history() {
+local i
+
+for i in "${(ok)history[@]}"
+do
+print "$i: ${history[$i]}"
+done
+}
+
+zec_tool_jack() {
+print moosefucker
+}
+
+zec_tools_parse() {
+local cmd="$1"
+
+[[ -n "${zec_tools[(r)$cmd]}" ]] || return 10
+
+zec_tool_$cmd
+}
+
+zec_subcommand() {
+local vpmpt line
+
+vpmpt="-p $subpmpt $1 "
+
+vared -h "$vpmpt" line
+print -s "$line"
+print -u9 "$line"
+}
+
+zec_parseresponse() {
+
+setopt localoptions extendedglob
+
+while builtin read "$readopts" answer
+do
+
+case "$answer" in
+	'1'(#b)(*)) print "${match[1]/ /}"
+	;;
+	3*) return 1
+	;;
+	'4'(#b)(*)) zec_subcommand "$match[1]"
+	;;
+	6*) break
+	;;
+	*) print "OH, NO!  I AM CONFUSED BY THIS LINE!"
+	   print "$answer"
+	   zelogout
+	;;
+esac
+
+done
+
+[[ "$answer" == '6 '(#b)([0-9]##)' '([0-9]##) ]] || return 9
+
+PS1="$pmpt $match[1]:$match[2]%# "
+}
+
+zec_command() {
+local line="$*"
+
+#vared -he "$vpmpt" line || zelogout
+#print -s "$line"
+if zec_alias_parse "${(z)line}"
+then
+print -u9 "$cookedline"
+elif zec_tools_parse "${(z)line}"
+then
+print -u9 ""
+else
+print -u9 "$line"
+fi
+
+zec_parseresponse
+}
+
+zec_connect()
+{
+if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]];
+then
+print "usage: $0 host port country password"
+print "or"
+return 2
+fi
+
+if zelogin $1 $2 $3 $4
+then
+zec_parseresponse
+else
+print "Boo, you suck.  $?"
+return 2
+fi
+}
+
+typeset -A zec_aliases
+zec_aliases=(exit quit)
+typeset -a zec_tools
+zec_tools=(history jack)
+
+precmd() {
+setopt noglob
+}
+
+    function preexec {
+        local cmd
+	setopt nomatch
+        cmd=(${(Q)${(z)1}})
+        if [[ -z $(whence ${cmd[1]}) ]]; then
+            eval "function ${(q)cmd[1]} { 
+		alias ${(q)cmd[1]}='zec_command '${(q)cmd[1]}
+                zec_command ${(q)cmd[1]}" '$*
+                unfunction' "${(q)cmd[1]}
+            }"
+        fi
+    }
+
+zec()
+{
+      if ! zle ; then
+          print -u2 "Use M-x zec RET to engage zec."
+          return 1
+      fi
+
+#alias exit='zelogout ; builtin exit'
+[[ -n "$ZEC_DEBUG" ]] && readopts="-u9E" || readopts="-u9"
+# change following line
+zec_connect ${ZEC_HOST:-hostname} ${ZEC_PORT:-u9ort} ${ZEC_COUNTRY:-country} ${ZEC_REPRESENTATIVE:-representative}
+}
+
+zle -N zec
+RPS1=zecsh
+
+setopt nocorrect nocorrectall ignoreeof
+
+trap 'zelogout' EXIT
+
+else
+ print zecsh requires zsh 4.1 to function properly.
+fi
