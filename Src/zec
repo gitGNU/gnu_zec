@@ -93,6 +93,8 @@ zec_tool_jack() {
   for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
   print th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}
 
+  rm ${tmpfilenam}
+
 }
 
 zec_tools_parse() {
