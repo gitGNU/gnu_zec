@@ -1,5 +1,5 @@
-man_MANS = zec.6
-CLEANFILES = zec.6
+dist_man_MANS = zec.6
+MAINTAINERCLEANFILES = zec.6
 
 SGML_FILES = zec.sgml
 EXTRA_DIST = $(SGML_FILES)

@@ -1,5 +1,8 @@
 2002-06-10  Clint Adams  <schizo@debian.org>
 
+	* Doc/Makefile.am: include the manpage in the dist tarball, only
+	delete it in maintainerclean.
+
 	* configure.ac, Src/zec, Src/zecsh, Config/version:
 	bump version to 0.1.0.0 for release of first tarball.
 
