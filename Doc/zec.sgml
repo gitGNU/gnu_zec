@@ -1,6 +1,6 @@
 <!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 
-  <!ENTITY mandate      "<date>April 28, 2003</date>">
+  <!ENTITY mandate      "<date>October 15, 2004</date>">
 
 ]>
 
@@ -14,7 +14,7 @@
       <surname>Adams</surname>
     </author>
     <copyright>
-      <year>2001</year>
+      <year>2001, 2002, 2003, 2004</year>
       <holder>Clint Adams</holder>
     </copyright>
     &mandate;
@@ -52,7 +52,7 @@
     </para>
 
     <para>For more information about Empire, see <ulink
-    url="http://www.wolfpackempire.com/">the Empire website</ulink>.</para>
+    url="http://www.empire.cx/">the Empire website</ulink>.</para>
 
   </refsect1>
   <refsect1>
