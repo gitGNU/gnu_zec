@@ -1,4 +1,10 @@
 2002-11-19  Clint Adams  <schizo@debian.org>
+
+	* configure.ac, Src/zec, Config/version:
+	bump version to 0.2.1.
+
+	* Src/zec: fix typo in last patch.
+
 	* configure.ac, Src/zec, Config/version:
 	bump version to 0.2.0.
 
