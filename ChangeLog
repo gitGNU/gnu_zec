@@ -1,3 +1,7 @@
+2002-10-10  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: reorder read options when ZEC_DEBUG is set.
+
 2002-06-10  Clint Adams  <schizo@debian.org>
 
 	* Doc/Makefile.am: include the manpage in the dist tarball, only

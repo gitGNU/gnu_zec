@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.1.0.0"
+ZEC_VERSION="0.1.1.0"
 
 cat <<EOF;
   zec version ${ZEC_VERSION}, Copyright (C) 2001-2002  Clint Adams
@@ -181,7 +181,7 @@ return 2
 fi
 }
 
-[[ -n "$ZEC_DEBUG" ]] && readopts="-u9E" || readopts="-u9"
+[[ -n "$ZEC_DEBUG" ]] && readopts="-Eu9" || readopts="-u9"
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools
