@@ -203,7 +203,7 @@ zec_tools_parse() {
 zec_subcommand() {
 	local vpmpt line
 
-	vpmpt="-p $subpmpt $1> "
+	vpmpt="-p $subpmpt ${1/\%/%%}> "
 
 	vared -h "$vpmpt" line
 	[[ -z "$line" ]] || print -s "$line"

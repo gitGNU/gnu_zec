@@ -1,3 +1,8 @@
+2004-11-02  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: escape percent signs in subcommands so they don't
+	  accidentally get expanded to tildes.
+
 2004-11-01  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: don't choke on lines beginning with a hyphen.
