@@ -1,0 +1,7 @@
+The Z-Shell Empire Client currently comes in two flavors.
+
+zec is a standalone script which resembles traditional Empire clients.  You
+invoke it, execute your game actions, and exit.
+
+zecsh is an experimental add-on to your normal shell environment, allowing
+you to intermingle Empire commands with standard shell constructs.
