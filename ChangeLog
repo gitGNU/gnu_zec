@@ -1,3 +1,9 @@
+2002-11-19  Clint Adams  <schizo@debian.org>
+	* configure.ac, Src/zec, Config/version:
+	bump version to 0.2.0.
+
+	* Src/zec: add support for redirection and piping.
+
 2002-10-11  Clint Adams  <schizo@debian.org>
 
 	* configure.ac, Src/zec, Src/zecsh, Config/version:
