@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.2.4"
+ZEC_VERSION="0.3"
 
 cat <<EOF;
   zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003  Clint Adams
@@ -95,6 +95,15 @@ zec_tool_jack() {
 
   rm ${tmpfilenam}
 
+}
+
+zec_tool_alias() {
+local i
+
+for i in "${(onk)zec_aliases[@]}"
+do
+print "$i: ${zec_aliases[$i]}"
+done
 }
 
 zec_tools_parse() {
@@ -212,6 +221,12 @@ do
      games[i]="${CONFIGLINE#addgame }"
      (( i++ ))
    ;;
+   'alias '(#b)([^ ]##)' '(*))
+     zec_aliases[${match[1]}]="$match[2]"
+   ;;
+   *)
+    print "Unknown config line: $CONFIGLINE"
+   ;;
  esac
 
 done <$1
@@ -259,7 +274,7 @@ fi
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools
-zec_tools=(history jack)
+zec_tools=(history jack alias)
 
 SCRIPTNAME="$0"
 

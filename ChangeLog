@@ -1,5 +1,10 @@
 2003-01-06  Clint Adams  <schizo@debian.org>
 
+	* configure.ac, Src/zec, Config/version: bump version to 0.3.
+
+	* Src/zec: handle aliases in .zecrc and read-only "alias"
+	  tool.
+
 	* Src/zec: remove jack tempfile after use.
 
 	* configure.ac, Src/zec, Config/version: bump version to 0.2.4.
