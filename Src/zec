@@ -103,18 +103,81 @@ zec_tool_history() {
 	done
 }
 
-zec_tool_jack() {
+zec_tool_tmp() {
 
-	local tmpfilenam="${TMPDIR:-/tmp}/zecjack$$"
-	local sects
+	local tmpfilenam="${TMPDIR:-/tmp}/zectmp$$"
+	local sects types
 
-	[[ -z "$1" ]] && sects="*" || sects="$1"
+	if [[ -z "$1" ]]
+	then
+		sects="*"
+		types="jk"
+	else
+		if [[ "$1" == [[:alpha:]]## ]]
+		then
+			sects="*"
+			types="$1"
+		else
+			sects="$1"
+			shift
+			if [[ -z "$1" ]]
+			then
+				types="jk"
+			else
+				if [[ "$1" == \?* ]]
+				then
+					sects += "$1"
+					shift
+					if [[ -z "$1" ]]
+					then
+						types="jk"
+					else
+						types="$1"
+					fi
+				else
+					types="$1"
+				fi
+			fi
+		fi
+	fi
 
 	zec_send "prod $sects >$tmpfilenam"
 	zec_parseresponse
-	for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
-	zec_send "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
-	zec_parseresponse
+
+	if [[ -n "${types//[jkdi]/}" ]];
+	then
+		print "Invalid sector types in ${types}."
+		return 1
+	fi
+
+	for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[${types}]*}
+	do
+		case "$i" in
+			(* [jk] *)
+			zec_send "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
+			zec_parseresponse
+			;;
+
+			(* d *)
+			zec_send "th o ${${(z)i}[1]} ${${(z)i}[12]/i(#e)/}"
+			zec_parseresponse
+			zec_send "th l ${${(z)i}[1]} ${${(z)i}[13]/i(#e)/}"
+			zec_parseresponse
+			zec_send "th h ${${(z)i}[1]} ${${(z)i}[14]/i(#e)/}"
+			zec_parseresponse
+			;;
+
+			(* i *)
+
+			zec_send "th l ${${(z)i}[1]} ${${(z)i}[11]/i(#e)/}"
+			zec_parseresponse
+			zec_send "th h ${${(z)i}[1]} ${${(z)i}[12]/i(#e)/}"
+			zec_parseresponse
+			;;
+		esac
+
+	done
+
 
 	rm ${tmpfilenam}
 }
@@ -213,7 +276,12 @@ zec_command() {
 	[[ -z "$line" ]] || print -s "$line"
 	if zec_alias_parse "${(z)line}"
 	then
-		zec_send "$cookedline"
+		if zec_tools_parse "${(z)cookedline}"
+		then
+			zec_send ""
+		else
+			zec_send "$cookedline"
+		fi
 	elif zec_tools_parse "${(z)line}"
 	then
 		zec_send ""
@@ -407,9 +475,9 @@ twitter() {
 
 [[ -n "$ZEC_DEBUG" ]] && unset TCP_SILENT
 typeset -A zec_aliases
-zec_aliases=(exit quit)
+zec_aliases=(exit quit jack "tmp jk")
 typeset -a zec_tools
-zec_tools=(history jack alias foreach setfood)
+zec_tools=(history tmp alias foreach setfood)
 
 SCRIPTNAME="$0"
 

@@ -2,6 +2,13 @@
 
 	* Src/zec: don't choke on lines beginning with a hyphen.
 
+	* Src/zec: rename "jack" tool to "tmp", and modify it so that
+	  it handles sector types j, k, d, and i.  Alias "jack" to
+	  "tmp jk".  This breaks use of "jack" with a sector
+	  specification.  Syntax for "tmp" is "tmp [<sects>]
+	  [<selector>] [<sector types>]", such as "tmp * jk", "tmp #1
+	  ?coa=1 di", or "tmp".
+
 2004-10-29  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: unbreak 'setfood' so that it accepts 0 arguments
