@@ -40,7 +40,7 @@ setopt extendedglob
 
 # send to empire server
 zec_send() {
-	tcp_send -s empire_server "$@"
+	tcp_send -s empire_server -- "$@"
 }
 
 # read from empire server

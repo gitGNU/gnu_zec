@@ -1,3 +1,7 @@
+2004-11-01  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: don't choke on lines beginning with a hyphen.
+
 2004-10-29  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: unbreak 'setfood' so that it accepts 0 arguments
