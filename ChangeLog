@@ -1,3 +1,10 @@
+2004-10-15  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: ignore comments in .zecrc.
+
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.3.3.
+
 2004-10-12  Clint Adams  <schizo@debian.org>
 
 	* Src/zec, Src/zecsh: change "country" command to
