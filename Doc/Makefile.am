@@ -1,7 +1,7 @@
 dist_man_MANS = zec.6
 MAINTAINERCLEANFILES = zec.6
 
-XML_FILES = zec.sgml
+XML_FILES = zec.xml
 EXTRA_DIST = $(XML_FILES)
 
 zec.6: zec.xml
