@@ -4,6 +4,6 @@
 
 	* Doc/Makefile.am: put zec.6 in CLEANFILES.
 
-	* Src/zec, Src/zecsh, Config/version: bump version
+	* configure.ac, Src/zec, Src/zecsh, Config/version: bump version
 	to 0.0.0.0.1 to commemorate the start of this changelog.
 
