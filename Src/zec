@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.0.0.0.1"
+ZEC_VERSION="0.1.0.0"
 
 cat <<EOF;
   zec version ${ZEC_VERSION}, Copyright (C) 2001-2002  Clint Adams

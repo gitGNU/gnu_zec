@@ -1,3 +1,8 @@
+2002-06-10  Clint Adams  <schizo@debian.org>
+
+	* configure.ac, Src/zec, Src/zecsh, Config/version:
+	bump version to 0.1.0.0 for release of first tarball.
+
 2002-06-09  Clint Adams  <schizo@debian.org>
 
 	* Src/Makefile.am: move zec to bin_SCRIPTS.
