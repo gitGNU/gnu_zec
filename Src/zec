@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.2.3"
+ZEC_VERSION="0.2.4"
 
 cat <<EOF;
   zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003  Clint Adams
@@ -162,6 +162,10 @@ do
 	'8 '(#b)(*)) redir_output "$match[1]"
 	;;
 	'9 '(#b)(*)) pipe_output "$match[1]"
+	;;
+  	'd'(#b)(*)) print_output "${match[1]/ /}"  # flash
+	;;
+  	'e'(#b)(*)) print_output "INFORM (slight confusion): ${match[1]/ /}"  # inform
 	;;
   	*) print "OH, NO!  I AM CONFUSED BY THIS LINE!"
   	   print "$answer"
