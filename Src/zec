@@ -17,10 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.3.1"
+ZEC_VERSION="0.3.2"
 
 cat <<EOF;
-  zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003  Clint Adams
+  zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003, 2004  Clint Adams
   zec comes with ABSOLUTELY NO WARRANTY.
   This is free software, and you are welcome to redistribute it
   under certain conditions.
@@ -48,7 +48,7 @@ builtin read "$readopts" answer
 print -u9 "client zec $ZEC_VERSION"
 builtin read "$readopts" answer
 [[ "$answer" == "0 talking to zec $ZEC_VERSION" ]] || return 3
-print -u9 "country $1"
+print -u9 "coun $1"
 builtin read "$readopts" answer
 [[ "$answer" == "0 country name $1" ]] || return 4
 print -u9 "pass $2"
