@@ -1,1 +1,3 @@
+AUTOMAKE_OPTIONS = foreign
+
 SUBDIRS = Doc Src

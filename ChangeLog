@@ -1,3 +1,9 @@
+2003-04-28  Clint Adams  <schizo@debian.org>
+
+	* configure.ac, Src/zec, Config/version: bump version to 0.3.1.
+
+	* Doc/zec.sgml: change url to http://www.wolfpackempire.com/ .
+
 2003-01-06  Clint Adams  <schizo@debian.org>
 
 	* configure.ac, Src/zec, Config/version: bump version to 0.3.
