@@ -87,11 +87,15 @@ done
 zec_tool_jack() {
 
   local tmpfilenam="${TMPDIR:-/tmp}/zecjack$$"
+  local sects
 
-  print -u9 "prod * >$tmpfilenam"
+  [[ -z "$1" ]] && sects="*" || sects="$1"
+
+  print -u9 "prod $sects >$tmpfilenam"
   zec_parseresponse
   for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
-  print th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}
+  print -u9 "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
+  zec_parseresponse
 
   rm ${tmpfilenam}
 
@@ -111,7 +115,8 @@ local cmd="$1"
 
 [[ -n "${zec_tools[(r)$cmd]}" ]] || return 10
 
-zec_tool_$cmd
+shift
+zec_tool_$cmd "$@"
 }
 
 zec_subcommand() {
@@ -234,6 +239,32 @@ do
 done <$1
 }
 
+zec_tool_foreach()
+{
+
+if [[ $# -lt 2 ]]; then
+    print "usage: foreach <sects> <command>"
+    return 1
+fi
+
+  local tmpfilenam="${TMPDIR:-/tmp}/zecforeach$$"
+  local sects sect
+
+sects="$1"
+shift
+
+  print -u9 "dump $sects >$tmpfilenam"
+  zec_parseresponse
+  for i in ${(M)${(f)"$(<$tmpfilenam)"}:##[0-9-]##[[:space:]]##[0-9-]##[[:space:]]*}
+  do
+      sect=${${i/ /,}%% *}
+      print -u9 "${(e)*}"
+      zec_parseresponse
+  done
+  rm ${tmpfilenam}
+
+}
+
 twitter() {
 local g
 
@@ -276,7 +307,7 @@ fi
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools
-zec_tools=(history jack alias)
+zec_tools=(history jack alias foreach)
 
 SCRIPTNAME="$0"
 
