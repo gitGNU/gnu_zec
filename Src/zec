@@ -85,7 +85,14 @@ done
 }
 
 zec_tool_jack() {
-print moosefucker
+
+  local tmpfilenam="${TMPDIR:-/tmp}/zecjack$$"
+
+  print -u9 "prod * >$tmpfilenam"
+  zec_parseresponse
+  for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
+  print th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}
+
 }
 
 zec_tools_parse() {

@@ -1,5 +1,7 @@
 2002-11-19  Clint Adams  <schizo@debian.org>
 
+	* Src/zec: add partial clone of pei's 'jack' tool.
+
 	* configure.ac, Src/zec, Config/version:
 	bump version to 0.2.1.
 
