@@ -31,285 +31,291 @@ zmodload -i zsh/parameter || exit 244
 zmodload -i zsh/net/tcp || exit 245
 zmodload -i zsh/zselect || exit 246
 
+autoload -U tcp_open
+TCP_SILENT=yes
+TCP_PROMPT=
+
 setopt extendedglob
+
+
+# send to empire server
+zec_send() {
+	tcp_send -s empire_server "$@"
+}
+
+# read from empire server
+zec_readline() {
+	if tcp_read -t 0.5 -s empire_server 
+	then
+		RET="$TCP_LINE"
+	else
+		return 1
+	fi
+}
 
 # connect to empire server
 # usage: zelogin country password hostname_or_ip tcpportnum
 
 zelogin() {
-local greeting answer
 
-ztcp -d 9 $3 $4
-builtin read "$readopts" greeting
-[[ "$greeting" == "2 Empire server ready" ]] || return 1
-print -u9 "user $LOGNAME"
-builtin read "$readopts" answer
-[[ "$answer" == "0 hello $LOGNAME" ]] || return 2
-print -u9 "client zec $ZEC_VERSION"
-builtin read "$readopts" answer
-[[ "$answer" == "0 talking to zec $ZEC_VERSION" ]] || return 3
-print -u9 "coun $1"
-builtin read "$readopts" answer
-[[ "$answer" == "0 country name $1" ]] || return 4
-print -u9 "pass $2"
-builtin read "$readopts" answer
-[[ "$answer" == "0 password ok" ]] || return 5
-print -u9 "play"
-builtin read "$readopts" answer
-[[ "$answer" == "2 2" ]] || return 6
+	tcp_open $3 $4 empire_server || return 1
+	zec_readline
+	[[ "$RET" == "2 Empire server ready" ]] || return 2
+	zec_send "user $LOGNAME"
+	zec_readline
+	[[ "$RET" == "0 hello $LOGNAME" ]] || return 3
+	zec_send "client zec $ZEC_VERSION"
+	zec_readline
+	[[ "$RET" == "0 talking to zec $ZEC_VERSION" ]] || return 4
+	zec_send "coun $1"
+	zec_readline
+	[[ "$RET" == "0 country name $1" ]] || return 5
+	zec_send "pass $2"
+	zec_readline
+	[[ "$RET" == "0 password ok" ]] || return 6
+	zec_send "play"
+	zec_readline
+	[[ "$RET" == "2 2" ]] || return 7
+
+	return 0
 }
 
 zelogout() {
-local answer
-
-print -u9 "quit"
-builtin read "$readopts" answer
-[[ "$answer" == "3 so long" ]] || return 8
+	zec_send "quit"
+	zec_readline
+	[[ "$RET" == "3 so long" ]] || return 8
 }
 
 zec_alias_parse() {
-local cmd="$1"
+	local cmd="$1"
 
-[[ -n "${zec_aliases[$cmd]}" ]] || return 9
+	[[ -n "${zec_aliases[$cmd]}" ]] || return 9
 
-cookedline="${line/$cmd/$zec_aliases[$cmd]}"
+	cookedline="${line/$cmd/$zec_aliases[$cmd]}"
 }
 
 zec_tool_history() {
-local i
+	local i
 
-for i in "${(onk)history[@]}"
-do
-print "$i: ${history[$i]}"
-done
+	for i in "${(onk)history[@]}"
+	do
+		print "$i: ${history[$i]}"
+	done
 }
 
 zec_tool_jack() {
 
-  local tmpfilenam="${TMPDIR:-/tmp}/zecjack$$"
-  local sects
+	local tmpfilenam="${TMPDIR:-/tmp}/zecjack$$"
+	local sects
 
-  [[ -z "$1" ]] && sects="*" || sects="$1"
+	[[ -z "$1" ]] && sects="*" || sects="$1"
 
-  print -u9 "prod $sects >$tmpfilenam"
-  zec_parseresponse
-  for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
-  print "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
-  print -u9 "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
-  zec_parseresponse
+	zec_send "prod $sects >$tmpfilenam"
+	zec_parseresponse
+	for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
+	zec_send "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
+	zec_parseresponse
 
-  rm ${tmpfilenam}
-
+	rm ${tmpfilenam}
 }
 
 zec_tool_alias() {
-local i
+	local i
 
-for i in "${(onk)zec_aliases[@]}"
-do
-print "$i: ${zec_aliases[$i]}"
-done
+	for i in "${(onk)zec_aliases[@]}"
+	do
+		print "$i: ${zec_aliases[$i]}"
+	done
 }
 
 zec_tools_parse() {
-local cmd="$1"
+	local cmd="$1"
 
-[[ -n "${zec_tools[(r)$cmd]}" ]] || return 10
+	[[ -n "${zec_tools[(r)$cmd]}" ]] || return 10
 
-shift
-zec_tool_$cmd "$@"
+	shift
+	zec_tool_$cmd "$@"
 }
 
 zec_subcommand() {
-local vpmpt line
+	local vpmpt line
 
-vpmpt="-p $subpmpt $1> "
+	vpmpt="-p $subpmpt $1> "
 
-vared -h "$vpmpt" line
-[[ -z "$line" ]] || print -s "$line"
-print -u9 "$line"
+	vared -h "$vpmpt" line
+	[[ -z "$line" ]] || print -s "$line"
+	zec_send "$line"
 }
 
 unset outgo
 
 redir_output() {
- outgo=${1}
- [[ "$outgo" != \>* ]] && exit 211
- eval exec 8$outgo
- outgo="-u8"
+	outgo=${1}
+	[[ "$outgo" != \>* ]] && exit 211
+	eval exec 8$outgo
+	outgo="-u8"
 }
 
 pipe_output() {
- [[ "$@" != \|* ]] && exit 212
- outgo=("${(z)@/| #/}")
- eval exec 8\>\>\(${outgo}\)
- outgo="-u8"
+	[[ "$@" != \|* ]] && exit 212
+	outgo=("${(z)@/| #/}")
+	eval exec 8\>\>\(${outgo}\)
+	outgo="-u8"
 }
 
 restore_output() {
- [[ "$outgo" == "-u8" ]] && exec 8>&-
- unset outgo
+	[[ "$outgo" == "-u8" ]] && exec 8>&-
+	unset outgo
 }
 
 print_output() {
- print $outgo -- "${1}"
+	print $outgo -- "${1}"
 }
 
 zec_parseresponse() {
 
-local i=0
+	while zec_readline
+	do
 
-while builtin zselect -t 100 -r 9
-do
-
-[[ "$i" -gt 0 ]] && print "TIMED OUT"
-
-  while builtin read "$readopts" answer
-  do
-
-  case "$answer" in
-  	'1'(#b)(*)) print_output "${(q)${match[1]/ /}}"
-  	;;
-  	3*) return 1
-  	;;
-  	'4'(#b)(*)) zec_subcommand "$match[1]"
-  	;;
-  	6*) restore_output ; break 2
-  	;;
+	case "$RET" in
+	'1'(#b)(*)) print_output "${(q)${match[1]/ /}}"
+		;;
+	3*) return 1
+		;;
+	'4'(#b)(*)) zec_subcommand "$match[1]"
+		;;
+	6*) restore_output
+		;;
 	'8 '(#b)(*)) redir_output "$match[1]"
-	;;
+		;;
 	'9 '(#b)(*)) pipe_output "$match[1]"
-	;;
-  	'd'(#b)(*)) print_output "${match[1]/ /}"  # flash
-	;;
-  	'e'(#b)(*)) print_output "INFORM (slight confusion): ${match[1]/ /}"  # inform
-	;;
-  	*) print "OH, NO!  I AM CONFUSED BY THIS LINE!"
-  	   print "$answer"
-  	   zelogout
-  	;;
-  esac
+		;;
+	'd'(#b)(*)) print_output "${match[1]/ /}"  # flash
+		;;
+	'e'(#b)(*)) print_output "INFORM (slight confusion): ${match[1]/ /}"  # inform
+		;;
+	*) print "OH, NO!  I AM CONFUSED BY THIS LINE!"
+		print "$RET"
+		zelogout
+		;;
+	esac
 
-  done
-
-(( i += 1 ))
-
-done
+	done
 }
 
 zec_command() {
-local line
+	local line
 
-[[ "$answer" == '6 '(#b)([0-9]##)' '([0-9]##) ]] || return 9
-vpmpt="-p $pmpt $match[1]:$match[2]%# "
+	[[ "$RET" == '6 '(#b)([0-9]##)' '([0-9]##) ]] || return 9
+	vpmpt="-p $pmpt $match[1]:$match[2]%# "
 
-vared -he "$vpmpt" line || zelogout
-[[ -z "$line" ]] || print -s "$line"
-if zec_alias_parse "${(z)line}"
-then
-print -u9 "$cookedline"
-elif zec_tools_parse "${(z)line}"
-then
-print -u9 ""
-else
-print -u9 "$line"
-fi
+	vared -he "$vpmpt" line || zelogout
+	[[ -z "$line" ]] || print -s "$line"
+	if zec_alias_parse "${(z)line}"
+	then
+		zec_send "$cookedline"
+	elif zec_tools_parse "${(z)line}"
+	then
+		zec_send ""
+	else
+		zec_send "$line"
+	fi
 }
 
 parse_config() {
-local CONFIGLINE
-local i=1
+	local CONFIGLINE
+	local i=1
 
-while read CONFIGLINE
-do
- case $CONFIGLINE in
-   (addgame*)
-     games[i]="${CONFIGLINE#addgame }"
-     (( i++ ))
-   ;;
-   'alias '(#b)([^ ]##)' '(*))
-     zec_aliases[${match[1]}]="$match[2]"
-   ;;
-   (\#*) # ignore comments
-   ;;
-   (*)
-    print "Unknown config line: $CONFIGLINE"
-   ;;
- esac
+	while read CONFIGLINE
+	do
+		case $CONFIGLINE in
+		(addgame*)
+			games[i]="${CONFIGLINE#addgame }"
+			(( i++ ))
+			;;
+		'alias '(#b)([^ ]##)' '(*))
+			zec_aliases[${match[1]}]="$match[2]"
+			;;
+		(\#*) # ignore comments
+			;;
+		(*)
+			print "Unknown config line: $CONFIGLINE"
+			;;
+		esac
 
-done <$1
+	done <$1
 }
 
 zec_tool_foreach()
 {
 
-if [[ $# -lt 2 ]]; then
-    print "usage: foreach <sects> <command>"
-    return 1
-fi
+	if [[ $# -lt 2 ]]; then
+		print "usage: foreach <sects> <command>"
+		return 1
+	fi
 
-  local tmpfilenam="${TMPDIR:-/tmp}/zecforeach$$"
-  local sects sect
+	local tmpfilenam="${TMPDIR:-/tmp}/zecforeach$$"
+	local sects sect
 
-sects="$1"
-shift
-if [[ "$1" == \?* ]];
-then
-sects+=" $1"
-shift
-fi
+	sects="$1"
+	shift
+	if [[ "$1" == \?* ]];
+	then
+		sects+=" $1"
+		shift
+	fi
 
-  print -u9 "dump $sects >$tmpfilenam"
-  zec_parseresponse
-  for i in ${(M)${(f)"$(<$tmpfilenam)"}:##[0-9-]##[[:space:]]##[0-9-]##[[:space:]]*}
-  do
-      sect=${${i/ /,}%% *}
-      print -u9 "${(e)*}"
-      zec_parseresponse
-  done
-  rm ${tmpfilenam}
+	zec_send "dump $sects >$tmpfilenam"
+	zec_parseresponse
+	for i in ${(M)${(f)"$(<$tmpfilenam)"}:##[0-9-]##[[:space:]]##[0-9-]##[[:space:]]*}
+	do
+		sect=${${i/ /,}%% *}
+		zec_send "${(e)*}"
+		zec_parseresponse
+	done
 
+	rm ${tmpfilenam}
 }
 
 twitter() {
-local g
+	local g
 
-[[ -r ~/.zecrc ]] && parse_config ~/.zecrc
+	[[ -r ~/.zecrc ]] && parse_config ~/.zecrc
 
-case $#games in
+	case $#games in
 	0)
-	;;
+		;;
 	1) set -- ${(z)games[1]}
-	   shift
-	;;
+	shift
+		;;
 	*) for i in $games; do g=(${(z)i}); printf "%-20s %20s:%s\n" ${g[1]} ${g[4]} ${g[5]}; done
-	   print "FIXME: should give a menu here"
-	   set -- ${(z)games[1]}
-	   shift
-	;;
-esac
+		print "FIXME: should give a menu here"
+		set -- ${(z)games[1]}
+	shift
+		;;
+	esac
 
-if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]];
-then
-print "usage: $SCRIPTNAME country password host port"
-print "or"
-return 2
-fi
+	if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]];
+	then
+		print "usage: $SCRIPTNAME country password host port"
+		print "or"
+		return 2
+		fi
 
-if zelogin $1 $2 $3 $4
-then
-zec_parseresponse
-while zec_command ; do zec_parseresponse ; done
-#zelogout && return 0
-#print "But we failed to log out."
-#return 1
-else
-print "Boo, you suck.  $?"
-return 2
-fi
+		if zelogin $1 $2 $3 $4
+		then
+			zec_parseresponse
+			while zec_command
+			do
+				zec_parseresponse
+			done
+		else
+			print "Boo, you suck.  $?"
+			return 2
+		fi
 }
 
-[[ -n "$ZEC_DEBUG" ]] && readopts="-Eru9" || readopts="-ru9"
+[[ -n "$ZEC_DEBUG" ]] && unset TCP_SILENT
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools
