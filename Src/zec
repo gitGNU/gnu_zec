@@ -151,7 +151,7 @@ restore_output() {
 }
 
 print_output() {
- print $outgo -- "$1"
+ print $outgo -- "${1}"
 }
 
 zec_parseresponse() {
@@ -167,7 +167,7 @@ do
   do
 
   case "$answer" in
-  	'1'(#b)(*)) print_output "${match[1]/ /}"
+  	'1'(#b)(*)) print_output "${(q)${match[1]/ /}}"
   	;;
   	3*) return 1
   	;;
@@ -303,7 +303,7 @@ return 2
 fi
 }
 
-[[ -n "$ZEC_DEBUG" ]] && readopts="-Eu9" || readopts="-u9"
+[[ -n "$ZEC_DEBUG" ]] && readopts="-Eru9" || readopts="-ru9"
 typeset -A zec_aliases
 zec_aliases=(exit quit)
 typeset -a zec_tools

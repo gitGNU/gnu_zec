@@ -1,3 +1,7 @@
+2004-10-24  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: fix loss of backslashes in server output.
+
 2004-10-23  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: change 'jack' tool to actually execute
