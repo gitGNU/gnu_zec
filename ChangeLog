@@ -7,6 +7,8 @@
 
 	* Doc/zec.sgml: change url to http://www.empire.cx/ .
 
+	* Doc/zec.xml: switch from DocBook SGML to DocBook/XML.
+
 2004-10-12  Clint Adams  <schizo@debian.org>
 
 	* Src/zec, Src/zecsh: change "country" command to
