@@ -277,13 +277,33 @@ zec_tool_foreach()
 	rm ${tmpfilenam}
 }
 
+# setfood <sects> <num of updates>
 zec_tool_setfood()
 {
 	local tmpfilenam="${TMPDIR:-/tmp}/zecsetfood$$"
-	local optionstate=NONE
+	local optionstate=NONE sects
 	local -A gameoptions
-	integer etus=0
+	integer etus=0 thresh curthresh num=1
 	float babyeatrate=0.0 eatrate=0.0
+
+	if [[ $# -lt 1 ]]; then
+		sects="*"
+	else
+		sects="$1"
+		shift
+		if [[ "$1" == \?* ]];
+		then
+			sects+=" $1"
+			shift
+		fi
+	fi
+
+	if [[ $# -eq 1 ]]; then
+		num=$1
+	else
+		print "setfood: Too many arguments"
+		return 1
+	fi
 
 	zec_send "version >$tmpfilenam"
 	zec_parseresponse
@@ -321,18 +341,30 @@ zec_tool_setfood()
 	done
 
 	rm ${tmpfilenam}
+
+	if [[ gameoptions[NOFOOD] == "enabled" ]];
+	then
+		print "setfood: food is not required in this game"
+		return 1
+	fi
+
 	zec_send "dump * >$tmpfilenam"
 	zec_parseresponse
-	# We should really parse the column headers here.
+
+	colheads=( ${(z)${(M)${(f)"$(<$tmpfilenam)"}:#*coast*}} )
 	for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:digit:]-]## [[:digit:]-]## *}
 	do
 	z=(${(z)i})
-	num=1
-	civ=$z[17]
-	mil=$z[18]
-	uw=$z[19]
-	thresh=$(( num * etus * eatrate * (civ + uw + mil ) + 2 * babyeatrate * (civ * civbirthrate + uw * uwbirthrate) ))
-	print -- "$z[1],$z[2] has $civ civ, $mil mil, $uw uw, not setting threshold to $thresh"
+	civ=$z[$colheads[(i)civ]]
+	mil=$z[$colheads[(i)mil]]
+	uw=$z[$colheads[(i)uw]]
+	curthresh=$z[$colheads[(i)f_dist]]
+	(( thresh = int(ceil(num * etus * eatrate * (civ + uw + mil ) + 2 * babyeatrate * (civ * civbirthrate + uw * uwbirthrate))) ))
+	if [[ $thresh -gt $curthresh ]]; then
+		print "th f $z[1],$z[2] $thresh"
+		zec_send "th f $z[1],$z[2] $thresh"
+		zec_parseresponse
+	fi
 	done
 }
 
