@@ -1,3 +1,2 @@
-bin_PROGRAMS = zec
-zec_SOURCES = zec
+bin_SCRIPTS = zec
 dist_data_DATA = zecsh
