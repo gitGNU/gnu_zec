@@ -2,6 +2,9 @@
 
 	* Src/zec: fix loss of backslashes in server output.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.4.0.
+
 2004-10-23  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: change 'jack' tool to actually execute
