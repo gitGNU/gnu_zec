@@ -1,3 +1,10 @@
+2002-10-11  Clint Adams  <schizo@debian.org>
+
+	* configure.ac, Src/zec, Src/zecsh, Config/version:
+	bump version to 0.1.5.0.
+
+	* Src/zec, Src/zecsh, Doc/zec.sgml: rudimentary support for ~/.zecrc.
+
 2002-10-10  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: reorder read options when ZEC_DEBUG is set.

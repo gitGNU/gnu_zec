@@ -1,6 +1,6 @@
 <!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 
-  <!ENTITY mandate      "<date>June  9, 2002</date>">
+  <!ENTITY mandate      "<date>October 10, 2002</date>">
 
 ]>
 
@@ -32,13 +32,14 @@
     <cmdsynopsis>
       <command>zec</command>
 
+      <arg><replaceable>country</replaceable></arg>
+
+      <arg><replaceable>representative</replaceable></arg>
+
       <arg><replaceable>host</replaceable></arg>
 
       <arg><replaceable>port</replaceable></arg>
 
-      <arg><replaceable>country</replaceable></arg>
-
-      <arg><replaceable>representative</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1>
@@ -57,17 +58,18 @@
   <refsect1>
     <title>ARGUMENTS</title>
 
-    <para>Currently, all four arguments are required.</para>
+    <para>Currently, all four arguments are required if you do not have a
+    ~/.zecrc.</para>
 
-    <para>The first is the resolvable hostname or IP of the
+    <para>The first is the name of your country.</para>
+
+    <para>The second argument is the representative of your
+    country.</para>
+
+    <para>The third is the resolvable hostname or IP of the
     server to which you wish to connect.</para>
 
-    <para>The second is the TCP port number of said server.</para>
-
-    <para>The third is the name of your country.</para>
-
-    <para>The fourth and final argument is the representative of your
-    country.</para>
+    <para>The fourth and final is the TCP port number of said server.</para>
 
     <para>If you do not know these values, contact your game
     administrator.</para>

@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.1.0.0"
+ZEC_VERSION="0.1.5.0"
 
 cat <<EOF;
   zecsh version ${ZEC_VERSION}, Copyright (C) 2001-2002  Clint Adams
@@ -37,7 +37,7 @@ zmodload -i zsh/net/tcp || exit 245
 zelogin() {
 local greeting answer
 
-ztcp -d 9 $1 $2
+ztcp -d 9 $3 $4
 builtin read "$readopts" greeting
 [[ "$greeting" == "2 Empire server ready" ]] || return 1
 print -u9 "user $LOGNAME"
@@ -46,10 +46,10 @@ builtin read "$readopts" answer
 print -u9 "client zec $ZEC_VERSION"
 builtin read "$readopts" answer
 [[ "$answer" == "0 talking to zec $ZEC_VERSION" ]] || return 3
-print -u9 "country $3"
+print -u9 "country $1"
 builtin read "$readopts" answer
-[[ "$answer" == "0 country name $3" ]] || return 4
-print -u9 "pass $4"
+[[ "$answer" == "0 country name $1" ]] || return 4
+print -u9 "pass $2"
 builtin read "$readopts" answer
 [[ "$answer" == "0 password ok" ]] || return 5
 print -u9 "play"
@@ -155,7 +155,7 @@ zec_connect()
 {
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]];
 then
-print "usage: $0 host port country password"
+print "usage: $0 country password host port"
 print "or"
 return 2
 fi
@@ -199,9 +199,9 @@ zec()
       fi
 
 #alias exit='zelogout ; builtin exit'
-[[ -n "$ZEC_DEBUG" ]] && readopts="-u9E" || readopts="-u9"
+[[ -n "$ZEC_DEBUG" ]] && readopts="-Eu9" || readopts="-u9"
 # change following line
-zec_connect ${ZEC_HOST:-hostname} ${ZEC_PORT:-u9ort} ${ZEC_COUNTRY:-country} ${ZEC_REPRESENTATIVE:-representative}
+zec_connect ${ZEC_COUNTRY:-country} ${ZEC_REPRESENTATIVE:-representative} ${ZEC_HOST:-hostname} ${ZEC_PORT:-u9ort}
 }
 
 zle -N zec
