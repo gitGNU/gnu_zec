@@ -1,0 +1,109 @@
+<!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+
+  <!ENTITY mandate      "<date>June  9, 2002</date>">
+
+]>
+
+<refentry>
+  <refentryinfo>
+    <address>
+      <email>schizo@debian.org</email>
+    </address>
+    <author>
+      <firstname>Clint</firstname>
+      <surname>Adams</surname>
+    </author>
+    <copyright>
+      <year>2001</year>
+      <holder>Clint Adams</holder>
+    </copyright>
+    &mandate;
+  </refentryinfo>
+  <refmeta>
+  <refentrytitle>zec</refentrytitle>
+  <manvolnum>6</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>zec</refname>
+
+    <refpurpose>Z-Shell Empire Client</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>zec</command>
+
+      <arg><replaceable>host</replaceable></arg>
+
+      <arg><replaceable>port</replaceable></arg>
+
+      <arg><replaceable>country</replaceable></arg>
+
+      <arg><replaceable>representative</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>DESCRIPTION</title>
+
+    <para>This manual page documents briefly the
+      <command>zec</command> command.</para>
+
+    <para><command>zec</command> is a client for the game Empire.
+    </para>
+
+    <para>For more information about Empire, see <ulink
+    url="http://www.empire.cx/">the Empire website</ulink>.</para>
+
+  </refsect1>
+  <refsect1>
+    <title>ARGUMENTS</title>
+
+    <para>Currently, all four arguments are required.</para>
+
+    <para>The first is the resolvable hostname or IP of the
+    server to which you wish to connect.</para>
+
+    <para>The second is the TCP port number of said server.</para>
+
+    <para>The third is the name of your country.</para>
+
+    <para>The fourth and final argument is the representative of your
+    country.</para>
+
+    <para>If you do not know these values, contact your game
+    administrator.</para>
+
+  </refsect1>
+  <refsect1>
+    <title>SEE ALSO</title>
+
+    <para>/usr/share/doc/zec/README.Debian</para>
+
+  </refsect1>
+  <refsect1>
+    <title>AUTHOR</title>
+
+    <para>zec was written by Clint Adams.
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the <acronym>GNU</acronym> General Public
+      License, Version 2, or (at your option) any later version
+      published by the Free Software Foundation.</para>
+
+  </refsect1>
+</refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->
