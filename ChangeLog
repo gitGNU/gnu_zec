@@ -9,6 +9,9 @@
 	  [<selector>] [<sector types>]", such as "tmp * jk", "tmp #1
 	  ?coa=1 di", or "tmp".
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.6.0.
+
 2004-10-29  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: unbreak 'setfood' so that it accepts 0 arguments
