@@ -1,3 +1,8 @@
+2004-10-29  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: unbreak 'setfood' so that it accepts 0 arguments
+	  again.
+
 2004-10-28  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: implement partial functionality of 'setfood' tool.
