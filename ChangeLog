@@ -2,6 +2,9 @@
 
 	* Src/zec: implement partial functionality of 'setfood' tool.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.5.0.
+
 2004-10-26  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: allow use of selectors with 'foreach' tool.
