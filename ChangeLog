@@ -1,0 +1,5 @@
+2002-06-09  Clint Adams  <schizo@debian.org>
+
+	* Src/zec, Src/zecsh, Config/version: bump version
+	to 0.0.0.0.1 to commemorate the start of this changelog.
+
