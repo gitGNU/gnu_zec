@@ -2,6 +2,8 @@
 
 	* Src/zec: allow use of selectors with 'foreach' tool.
 
+	* Src/zec: also print commands 'jack' tool is executing.
+
 2004-10-24  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: fix loss of backslashes in server output.

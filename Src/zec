@@ -94,6 +94,7 @@ zec_tool_jack() {
   print -u9 "prod $sects >$tmpfilenam"
   zec_parseresponse
   for i in ${(M)${(f)"$(<$tmpfilenam)"}:#[[:space:]]#-#[0-9]##,-#[0-9]##[[:space:]]##[jk]*};
+  print "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
   print -u9 "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
   zec_parseresponse
 
