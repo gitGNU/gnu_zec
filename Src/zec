@@ -252,6 +252,11 @@ fi
 
 sects="$1"
 shift
+if [[ "$1" == \?* ]];
+then
+sects+=" $1"
+shift
+fi
 
   print -u9 "dump $sects >$tmpfilenam"
   zec_parseresponse

@@ -1,3 +1,7 @@
+2004-10-26  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: allow use of selectors with 'foreach' tool.
+
 2004-10-24  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: fix loss of backslashes in server output.
