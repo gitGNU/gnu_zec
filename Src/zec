@@ -1,7 +1,7 @@
 #!/usr/bin/zsh
 
 # zec: Z-Shell Empire Client
-#   Copyright (C) 2001, 2002, 2003, 2004  Clint Adams
+#   Copyright (C) 2001, 2002, 2003, 2004, 2005  Clint Adams
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-ZEC_VERSION="0.6.0"
+ZEC_VERSION="0.7.0"
 
 cat <<EOF;
-  zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003, 2004  Clint Adams
+  zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003, 2004, 2005  Clint Adams
   zec comes with ABSOLUTELY NO WARRANTY.
   This is free software, and you are welcome to redistribute it
   under certain conditions.

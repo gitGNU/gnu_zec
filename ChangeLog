@@ -2,6 +2,9 @@
 
 	* Src/zec: fix bug in tmp tool for j/k thresholding.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.7.0.
+
 2004-11-02  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: escape percent signs in subcommands so they don't
