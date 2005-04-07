@@ -154,7 +154,7 @@ zec_tool_tmp() {
 	do
 		case "$i" in
 			(* [jk] *)
-			zec_send "th i ${${(z)i}[1]} ${${(z)i}[10]/i(#e)/}"
+			zec_send "th i ${${(z)i}[1]} ${${(z)i}[9]/i(#e)/}"
 			zec_parseresponse
 			;;
 

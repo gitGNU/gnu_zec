@@ -1,3 +1,7 @@
+2005-04-06  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: fix bug in tmp tool for j/k thresholding.
+
 2004-11-02  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: escape percent signs in subcommands so they don't
