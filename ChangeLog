@@ -1,3 +1,7 @@
+2005-04-16  Clint Adams  <schizo@debian.org>
+
+	* Src/zec: add l thresholding to tmp tool.
+
 2005-04-06  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: fix bug in tmp tool for j/k thresholding.
