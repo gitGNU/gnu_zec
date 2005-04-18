@@ -144,7 +144,7 @@ zec_tool_tmp() {
 	zec_send "prod $sects >$tmpfilenam"
 	zec_parseresponse
 
-	if [[ -n "${types//[jkdil]/}" ]];
+	if [[ -n "${types//[jkdilt]/}" ]];
 	then
 		print "Invalid sector types in ${types}."
 		return 1
@@ -177,6 +177,13 @@ zec_tool_tmp() {
 
 			(* l *)
 			zec_send "th l ${${(z)i}[1]} ${${(z)i}[9]/l(#e)/}"
+			zec_parseresponse
+			;;
+
+			(* t *)
+			zec_send "th d ${${(z)i}[1]} ${${(z)i}[11]/d(#e)/}"
+			zec_send "th o ${${(z)i}[1]} ${${(z)i}[12]/o(#e)/}"
+			zec_send "th l ${${(z)i}[1]} ${${(z)i}[13]/l(#e)/}"
 			zec_parseresponse
 			;;
 		esac
