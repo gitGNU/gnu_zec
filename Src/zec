@@ -159,19 +159,19 @@ zec_tool_tmp() {
 			;;
 
 			(* d *)
-			zec_send "th o ${${(z)i}[1]} ${${(z)i}[12]/i(#e)/}"
+			zec_send "th o ${${(z)i}[1]} ${${(z)i}[11]/o(#e)/}"
 			zec_parseresponse
-			zec_send "th l ${${(z)i}[1]} ${${(z)i}[13]/i(#e)/}"
+			zec_send "th l ${${(z)i}[1]} ${${(z)i}[12]/l(#e)/}"
 			zec_parseresponse
-			zec_send "th h ${${(z)i}[1]} ${${(z)i}[14]/i(#e)/}"
+			zec_send "th h ${${(z)i}[1]} ${${(z)i}[13]/h(#e)/}"
 			zec_parseresponse
 			;;
 
 			(* i *)
 
-			zec_send "th l ${${(z)i}[1]} ${${(z)i}[11]/i(#e)/}"
+			zec_send "th l ${${(z)i}[1]} ${${(z)i}[10]/l(#e)/}"
 			zec_parseresponse
-			zec_send "th h ${${(z)i}[1]} ${${(z)i}[12]/i(#e)/}"
+			zec_send "th h ${${(z)i}[1]} ${${(z)i}[11]/h(#e)/}"
 			zec_parseresponse
 			;;
 
