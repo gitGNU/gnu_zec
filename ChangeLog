@@ -2,6 +2,9 @@
 
 	* Src/zec: fix d and i thresholding in tmp tool.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.8.0.
+
 2005-04-18  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: add t thresholding to tmp tool.
