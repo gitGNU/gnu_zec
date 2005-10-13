@@ -3,6 +3,9 @@
 	* Src/zec: add support for persistent history
 	files.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.9.0.
+
 2005-04-23  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: fix d and i thresholding in tmp tool.
