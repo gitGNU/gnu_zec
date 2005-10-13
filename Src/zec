@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/zsh -i
 
 # zec: Z-Shell Empire Client
 #   Copyright (C) 2001, 2002, 2003, 2004, 2005  Clint Adams
@@ -470,19 +470,25 @@ twitter() {
 		print "usage: $SCRIPTNAME country password host port"
 		print "or"
 		return 2
-		fi
+	fi
 
-		if zelogin $1 $2 $3 $4
-		then
+	if zelogin $1 $2 $3 $4
+	then
+		zec_parseresponse
+		# set up history
+		local zec_savedir="${5/(#s)\~/$HOME}"
+		[[ -n "$5" ]] && [[ -d "${zec_savedir}" ]] &&
+			history -ap "${zec_savedir}"/history || history -ap ${TMPDIR:-/tmp}/zec_history.$$
+
+		while zec_command
+		do
 			zec_parseresponse
-			while zec_command
-			do
-				zec_parseresponse
-			done
-		else
-			print "Boo, you suck.  $?"
-			return 2
-		fi
+		done
+	else
+		print "Boo, you suck.  $?"
+		return 2
+	fi
+
 }
 
 [[ -n "$ZEC_DEBUG" ]] && unset TCP_SILENT
