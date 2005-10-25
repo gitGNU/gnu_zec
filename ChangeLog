@@ -2,6 +2,9 @@
 
 	* Src/zec: add prodflow tool with ugly output.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.10.0.
+
 2005-10-13  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: add support for persistent history
