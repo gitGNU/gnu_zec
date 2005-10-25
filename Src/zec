@@ -447,6 +447,91 @@ zec_tool_setfood()
 	done
 }
 
+# prodflow <sects>
+zec_tool_prodflow()
+{
+	local tmpfilenam="${TMPDIR:-/tmp}/zecprodflow$$"
+	local sectortype sectormake prodtype uses
+	typeset -A produced used
+	local u types
+
+	if [[ $# -lt 1 ]]; then
+		sects="*"
+	else
+		sects="$1"
+	fi
+
+	zec_send "prod $sects >$tmpfilenam"
+	zec_parseresponse
+	for i in ${(f)"$(<$tmpfilenam)"}
+	do
+		case "$i" in
+			([ ]##[0-9-]##,[0-9-]## ##(#b)([^ ]) ##[0-9]##\% ##[0-9]## ##([0-9.]##[a-z]#) ##[0-9.]## ##\$[0-9]## (*) [0-9.]##)
+			sectortype="$match[1]"
+			sectormake="$match[2]"
+			usage="$match[3]"
+			[[ -n "$ZEC_DEBUG" ]] && print "$sectortype makes $sectormake"
+			if [[ ${sectormake[-1]} == [a-z] ]]; then
+			  prodtype=${sectormake[-1]}
+			else
+			  case "$sectortype" in
+			    (t)
+			    prodtype="tech"
+			    ;;
+			    (l)
+			    prodtype="edu"
+			    ;;
+			    (*)
+			    prodtype="unknown"
+			    ;;
+			  esac
+			fi
+
+			(( produced[$prodtype] += ${sectormake%[a-z]} ))
+
+			uses=(${=usage})
+			for u in ${uses[1,$#uses/2]}
+			do
+			  prodtype=${u[-1]}
+			  (( used[$prodtype] += ${u%[a-z]} ))
+			done
+			;;
+			(*)
+			# silently throw away
+			;;
+		esac
+	done
+
+	rm ${tmpfilenam}
+
+	printf "\nTO BE PRODUCED\n"
+
+	for prodtype in ${(ok)produced}
+	do
+	  printf "%-10s: %s\n" "$prodtype" "${produced[$prodtype]}"
+	done
+
+	printf "\nTO BE USED\n"
+
+	for prodtype in ${(ok)used}
+	do
+	  printf "%-10s: %s\n" "$prodtype" "${used[$prodtype]}"
+	done
+
+	types=(${(k)produced} ${(k)used})
+	typeset -U types
+
+	printf "\nNET\n"
+
+	for prodtype in ${(o)types}
+	do
+	  printf "%-10s: %s\n" "$prodtype" "$(( 0$produced[$prodtype] - 0${used[$prodtype]} ))"
+	done
+
+
+}
+
+
 twitter() {
 	local g
 
@@ -495,7 +580,7 @@ twitter() {
 typeset -A zec_aliases
 zec_aliases=(exit quit jack "tmp jk")
 typeset -a zec_tools
-zec_tools=(history tmp alias foreach setfood)
+zec_tools=(history tmp alias foreach setfood prodflow)
 
 SCRIPTNAME="$0"
 
