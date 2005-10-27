@@ -75,7 +75,33 @@ zelogin() {
 	[[ "$RET" == "0 password ok" ]] || return 6
 	zec_send "play"
 	zec_readline
-	[[ "$RET" == "2 2" ]] || return 7
+	case "$RET" in
+	  ("2 2")
+	    # success
+	    ;;
+	  ("3 country in use by "(#b)(*))
+	    print "That country is in use by $match[1]"
+	    if [[ -n "$zec_force_disconnect" ]];
+	    then
+	      print -n "Killing that session..."
+	      zec_send "kill"
+	      zec_readline
+	      if [[ "$RET" == "3 closed socket of offending job" ]];
+	      then
+		print " succeeded."
+		exit
+	      else
+	        print " failed... $RET"
+	        return 7
+	      fi
+	    else
+	      print "If you wish to kill that session, run zec -K."
+	    fi
+	    ;;
+	  (*)
+	    return 7
+	    ;;
+	esac
 
 	return 0
 }
@@ -534,6 +560,18 @@ zec_tool_prodflow()
 
 twitter() {
 	local g
+
+	while getopts :K opt
+	do
+	  case "$opt" in
+	  (K)
+	    zec_force_disconnect=true
+	    ;;
+	  (*)
+	    return 66
+	    ;;
+	  esac
+	done
 
 	[[ -r ~/.zecrc ]] && parse_config ~/.zecrc
 
