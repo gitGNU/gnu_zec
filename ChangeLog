@@ -4,6 +4,9 @@
 	countries in use and the killing of such
 	sessions.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.11.0.
+
 2005-10-25  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: add prodflow tool with ugly output.
