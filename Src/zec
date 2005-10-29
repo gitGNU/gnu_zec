@@ -507,6 +507,9 @@ zec_tool_prodflow()
 			    (l)
 			    prodtype="edu"
 			    ;;
+			    (p)
+			    prodtype="happiness"
+			    ;;
 			    (*)
 			    prodtype="unknown"
 			    ;;
