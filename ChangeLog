@@ -5,6 +5,8 @@
 	* configure.ac, Src/zec, Config/version: bump
 	  version to 0.11.1.
 
+	* Src/zec: add refinery support to tmp.
+
 2005-10-29  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: add happiness to prodflow output.
