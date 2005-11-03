@@ -533,28 +533,24 @@ zec_tool_prodflow()
 
 	rm ${tmpfilenam}
 
-	printf "\nTO BE PRODUCED\n"
-
-	for prodtype in ${(ok)produced}
-	do
-	  printf "%-10s: %s\n" "$prodtype" "${produced[$prodtype]}"
-	done
-
-	printf "\nTO BE USED\n"
-
-	for prodtype in ${(ok)used}
-	do
-	  printf "%-10s: %s\n" "$prodtype" "${used[$prodtype]}"
-	done
+	printf "\nTO BE PRODUCED/USED\n"
 
 	types=(${(k)produced} ${(k)used})
 	typeset -U types
 
-	printf "\nNET\n"
-
 	for prodtype in ${(o)types}
 	do
-	  printf "%-10s: %s\n" "$prodtype" "$(( 0$produced[$prodtype] - 0${used[$prodtype]} ))"
+	  case "$prodtype" in
+	      (tech)
+	        printf "%-10s: %4.2f\n" "$prodtype" "${produced[$prodtype]}"
+	      ;;
+	      (happiness|edu)
+	        printf "%-10s: %d\n" "$prodtype" "${produced[$prodtype]}"
+	      ;;
+	      (*)
+	        printf "%-10s: %6d - %6d = %6d\n" "$prodtype" "${produced[$prodtype]}" "${used[$prodtype]}" "$(( 0$produced[$prodtype] - 0${used[$prodtype]} ))"
+	      ;;
+	  esac
 	done
 
 
