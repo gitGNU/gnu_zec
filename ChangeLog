@@ -2,6 +2,9 @@
 
 	* Src/zec: make prodflow output a bit easier to read.
 
+	* configure.ac, Src/zec, Config/version: bump
+	  version to 0.11.1.
+
 2005-10-29  Clint Adams  <schizo@debian.org>
 
 	* Src/zec: add happiness to prodflow output.
