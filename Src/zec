@@ -20,7 +20,8 @@
 ZEC_VERSION="0.12"
 
 cat <<EOF;
-  zec version ${ZEC_VERSION}, Copyright (C) 2001, 2002, 2003, 2004, 2005  Clint Adams
+  zec version ${ZEC_VERSION},
+  Copyright (C) 2001, 2002, 2003, 2004, 2005, 2008  Clint Adams
   zec comes with ABSOLUTELY NO WARRANTY.
   This is free software, and you are welcome to redistribute it
   under certain conditions.
