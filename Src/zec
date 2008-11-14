@@ -104,7 +104,7 @@ zelogin() {
 	    fi
 	    ;;
 	  (*)
-	    return 7
+	    return 8
 	    ;;
 	esac
 
@@ -114,13 +114,13 @@ zelogin() {
 zelogout() {
 	zec_send "quit"
 	zec_readline
-	[[ "$RET" == "3 so long" ]] || return 8
+	[[ "$RET" == "3 so long" ]] || return 9
 }
 
 zec_alias_parse() {
 	local cmd="$1"
 
-	[[ -n "${zec_aliases[$cmd]}" ]] || return 9
+	[[ -n "${zec_aliases[$cmd]}" ]] || return 10
 
 	cookedline="${line/$cmd/$zec_aliases[$cmd]}"
 }
