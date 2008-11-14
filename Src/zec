@@ -67,6 +67,11 @@ zelogin() {
 	zec_send "client zec $ZEC_VERSION"
 	zec_readline
 	[[ "$RET" == "0 talking to zec $ZEC_VERSION" ]] || return 4
+	if [[ "$LANG" == (#i)*UTF-#8 ]]; then
+		zec_send "options utf-8"
+		zec_readline
+		[[ "$RET" == "0 Accepted" ]] || print "UTF-8 not supported by server."
+	fi
 	zec_send "coun $1"
 	zec_readline
 	[[ "$RET" == "0 country name $1" ]] || return 5
