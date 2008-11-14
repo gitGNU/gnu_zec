@@ -279,7 +279,7 @@ restore_output() {
 }
 
 print_output() {
-	print $outgo -- "${1}"
+	print -r $outgo -- "${(Q)1}"
 }
 
 zec_parseresponse() {
